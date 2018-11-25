@@ -1,0 +1,6 @@
+*.avx
+*.mat
+*.txt
+*.png
+*.tex
+*.ini
