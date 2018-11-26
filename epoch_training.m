@@ -26,8 +26,6 @@ for data = 1:length(dataset.p)
                 a{layer} = tansig(n);
         end
     end
-    %final_dimension = [length(dataset.t) 1];
-    %e = reshape(t, final_dimension) - reshape (a{length(parameters)}, final_dimension);
     e = t - a{length(parameter)};
     epoch_error = epoch_error + e;
 
@@ -64,7 +62,14 @@ for data = 1:length(dataset.p)
         else
             weight_adjust = parameter(layer).w - configuration.alpha * s{layer} .* a{layer-1}';
         end
+        bias_adjust = parameter(layer).b - configuration.alpha * s{layer};
         parameter(layer).w = weight_adjust;
+        parameter(layer).b = bias_adjust;
     end
 end
+
+%% Saving results to mat file for this epoch
+save('parameters.mat','parameter');
+
+%% Calculating epoch error
 epoch_error = epoch_error / length(dataset.p);
