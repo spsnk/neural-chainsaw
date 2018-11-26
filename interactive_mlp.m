@@ -40,8 +40,20 @@ dataset = dataset_divide(configuration.train_percent, configuration.valid_percen
 
 %% Workspace cleanup & save configuration
 save('configuration.mat','configuration');
-clearvars -except configuration
+clearvars -except configuration dataset
 
 %% Inicializacion de la arquitectura
 parameters = mlp_init(configuration.arch1);
+
+%% Entrenamiento
+for epoch = 1:configuration.epochmax
+    if mod(epoch,configuration.epochval)
+        epoch_validation_error = epoch_validation( configuration.arch2, dataset.valid, parameters );
+    else 
+        epoch_error = epoch_training( configuration.arch2, dataset.train, parameters );
+    end
+end
+
+
+
 
