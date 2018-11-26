@@ -18,7 +18,7 @@ configuration.output_file = uigetfile('*.txt','Seleccione el archivo de salidas 
 prompt = {'Número máximo de épocas','Múltiplo de épocas de validación','Valor máximo de error de época de entrenamiento','Número máximo de incrementos consecutivos de error de valicación'};
 title = 'Condiciones de finalización';
 dims = [1 1 1 1];
-definput = {'1000','10','0.1','10'};
+definput = {'1','10','0.1','10'};
 answer = inputdlg(prompt,title,dims,definput);
 [epochmax, epochval, max_epoch_error_train, numval] = answer{:};
 configuration.epochmax = str2double(epochmax);
@@ -47,7 +47,7 @@ parameters = mlp_init(configuration.arch1);
 
 %% Entrenamiento
 for epoch = 1:configuration.epochmax
-    if mod(epoch,configuration.epochval)
+    if mod(epoch,configuration.epochval) == 0
         epoch_validation_error = epoch_validation( configuration.arch2, dataset.valid, parameters );
     else 
         epoch_error = epoch_training( configuration.arch2, dataset.train, parameters );

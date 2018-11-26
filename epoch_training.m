@@ -3,26 +3,28 @@ function [epoch_error] = epoch_training(arch2, dataset, parameters)
 %realizando backpropagation, regresando el error de epoca.
 
 %Pre-alocando a
-a = zeros(1,length(parameters));
+a = cell(1,length(parameters));
 
 %Procesando cada capa
 for layer = 1:length(parameters)
-    if mod(layer,2)
-        w = parameters(layer).w;
-        p = dataset.p;
+    if layer == 1
+        n = parameters(layer).w * dataset.p';
     else
-        w = parameters(layer).w';
-        p = dataset.p';
+        n = parameters(layer).w * a{layer-1};
     end
-    n = w * p;
     switch arch2(layer)
         case 1
-            a(layer) = purelin(n);
+            a(layer) = {purelin(n)};
         case 2
-            a(layer) = logsig(n);
+            a(layer) = {logsig(n)};
         case 3
-            a(layer) = tansig(n);
+            a(layer) = {tansig(n)};
     end
 end
 
-epoch_error = sum(e, 'all') / length(T);
+final_dimension = [length(dataset.t) 1];
+
+e = reshape(dataset.t, final_dimension) - reshape ( a{length(parameters)}, final_dimension);
+
+epoch_error = sum(e)/length(e);
+
