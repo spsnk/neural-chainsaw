@@ -54,6 +54,8 @@ for epoch = 1:configuration.epochmax
     else 
         [epoch_error, parameter] = epoch_training( configuration, dataset.train, parameter );
     end
+%Saving backpropagation calculations for this epoch
+    save('parameter.mat','parameter');
 end
 
 %% Presentación de resultados
