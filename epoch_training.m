@@ -40,14 +40,14 @@ for data = 1:length(dataset.p)
                 dim = length(a{layer});
                 f = zeros(dim);
                 for a_fill = 1:dim
-                    a_vect(dim) = (1-a{layer}(a_fill))*a{layer}(a_fill);
+                    a_vect(a_fill) = ( 1 - a{layer}(a_fill) ) * a{layer}(a_fill);
                 end
                 f(1:dim+1:dim^2) = a_vect;
             case 3
                 dim = length(a{layer});
                 f = zeros(dim);
                 for a_fill = 1:dim
-                    a_vect(dim) = 1 - (a{layer}(a_fill))^2;
+                    a_vect(a_fill) = 1 - (a{layer}(a_fill))^2;
                 end
                 f(1:dim+1:dim^2) = a_vect;
         end
@@ -58,9 +58,9 @@ for data = 1:length(dataset.p)
         end
 %Aplicación de reglas de aprendizaje
         if layer == 1
-            weight_adjust = parameter(layer).w - configuration.alpha * s{layer} .* p;
+            weight_adjust = parameter(layer).w - configuration.alpha * s{layer} * p;
         else
-            weight_adjust = parameter(layer).w - configuration.alpha * s{layer} .* a{layer-1}';
+            weight_adjust = parameter(layer).w - configuration.alpha * s{layer} * a{layer-1}';
         end
         bias_adjust = parameter(layer).b - configuration.alpha * s{layer};
         parameter(layer).w = weight_adjust;

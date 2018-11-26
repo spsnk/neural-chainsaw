@@ -50,7 +50,7 @@ parameter = mlp_init(configuration.arch1);
 %% Entrenamiento
 for epoch = 1:configuration.epochmax
     if mod(epoch,configuration.epochval) == 0
-        epoch_validation_error = epoch_validation( configuration.arch2, dataset.valid, parameter );
+        epoch_validation_error = epoch_validation( configuration, dataset.valid, parameter );
     else 
         [epoch_error, parameter] = epoch_training( configuration, dataset.train, parameter );
     end
