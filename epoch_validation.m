@@ -1,4 +1,4 @@
-function [valerror] = epoch_validation(P, T, W1, b1, W2, b2)
+function [validation_error] = epoch_validation(P, T, W1, b1, W2, b2)
 %Esta funcion ejecuta la validacion propagando los valores hacia adelante y
 %regresando el error de validación.
 
@@ -12,4 +12,4 @@ a = a2;
 
 e = T - a;
 
-valerror = sum(e, 'all') / length(T);
+validation_error = sum(e, 'all') / length(T);
