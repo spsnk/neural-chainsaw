@@ -5,7 +5,7 @@ function [epoch_error] = epoch_training(arch2, dataset, parameters)
 %Pre-alocando a
 a = cell(1,length(parameters));
 
-%Procesando cada capa
+%% Feed Fordward
 for layer = 1:length(parameters)
     if layer == 1
         n = parameters(layer).w * dataset.p';
@@ -27,4 +27,6 @@ final_dimension = [length(dataset.t) 1];
 e = reshape(dataset.t, final_dimension) - reshape ( a{length(parameters)}, final_dimension);
 
 epoch_error = sum(e)/length(e);
+
+%% Backpropagation
 
