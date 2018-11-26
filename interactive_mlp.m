@@ -50,7 +50,7 @@ for epoch = 1:configuration.epochmax
     if mod(epoch,configuration.epochval) == 0
         epoch_validation_error = epoch_validation( configuration.arch2, dataset.valid, parameters );
     else 
-        epoch_error = epoch_training( configuration.arch2, dataset.train, parameters );
+        epoch_error = epoch_training( configuration, dataset.train, parameters );
     end
 end
 
