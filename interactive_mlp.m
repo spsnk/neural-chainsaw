@@ -43,6 +43,7 @@ dataset = dataset_divide(configuration.train_percent, configuration.valid_percen
 %% Workspace cleanup & save configuration
 save('configuration.mat','configuration');
 clearvars -except configuration dataset
+delete historic_*.txt
 
 %% Inicialización de la arquitectura
 parameter = mlp_init(configuration.arch1);
@@ -60,5 +61,27 @@ end
 
 %% Presentación de resultados
 
+disp('Valores finales');
+for i = 1:length(parameter)
+    fprintf('w%d = ',i);
+    fprintf('%f ',parameter(i).w);
+    fprintf('\nb%d = ',i);
+    fprintf('%f ',parameter(i).b);
+    fprintf('\n');
+end
 
+historic_weight = importdata("historic_weight.txt");
+historic_bias = importdata("historic_bias.txt");
+
+figure;
+plot(1:size(historic_weight,1),historic_weight);
+xlabel('Weight adjustment');
+ylabel('Value');
+title('Weight learning');
+
+figure;
+plot(1:size(historic_bias,1),historic_bias);
+xlabel('Bias adjustment');
+ylabel('Value');
+title('Bias learning');
 
