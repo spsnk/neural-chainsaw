@@ -1,7 +1,7 @@
 function [parameters] = mlp_init (arquitecture)
 %Inicializa los pesos y bias basado en la arquitectura dada como argumento
 % por ejemplo: v1 = [1 2 1];
-%Guarda los valores en el archivo 'parameters.mat'
+%Regresa y guarda los valores en el archivo 'parameters.mat'
 
 parameters = struct ( 'w', cell([1 2]), 'b', cell([1 2]));
 
