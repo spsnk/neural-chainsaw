@@ -31,7 +31,7 @@ for data = 1:length(dataset.p)
         end
     end
     e = t - a{length(parameter)};
-    epoch_error = epoch_error + e;
+    epoch_error = epoch_error + abs(e);
 
 %% Backpropagation
     s = cell(1,length(parameter));

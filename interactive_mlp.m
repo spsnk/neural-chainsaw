@@ -20,7 +20,7 @@ configuration.output_file = fullfile(path, file);
 prompt = {'Número máximo de épocas','Múltiplo de épocas de validación','Valor máximo de error de época de entrenamiento','Número máximo de incrementos consecutivos de error de valicación'};
 title = 'Condiciones de finalización';
 dims = [1 1 1 1];
-definput = {'100','10','0.1','10'};
+definput = {'100','10','10','10'};
 answer = inputdlg(prompt,title,dims,definput);
 [epochmax, epochval, max_epoch_error_train, numval] = answer{:};
 configuration.epochmax = str2double(epochmax);
@@ -49,9 +49,23 @@ delete historic_*.txt
 parameter = mlp_init(configuration.arch1);
 
 %% Entrenamiento
+incremento=0;
 for epoch = 1:configuration.epochmax
     if mod(epoch,configuration.epochval) == 0
+        epoch_validation_error=0;
+        last_epoch_validation_error = epoch_validation_error;
         epoch_validation_error = epoch_validation( configuration, dataset.valid, parameter );
+        if last_epoch_validation_error < epoch_validation_error
+            incremento = incremento+1;
+        else
+            incremento = 0;
+        end
+        last_epoch_validation_error = epoch_validation_error;
+        %Se verifica que no exista sobre entrenamiento y de ser asi el entrenamiento termina.
+        if incremento == numval
+            epocas = configuration.epochmax + 1;
+            fprintf('\nTermina por early stopping\n');
+        end
     else 
         [epoch_error, parameter] = epoch_training( configuration, dataset.train, parameter );
     end
@@ -69,6 +83,9 @@ for i = 1:length(parameter)
     fprintf('%f ',parameter(i).b);
     fprintf('\n');
 end
+fprintf('\nError de epoca:               %f\n',epoch_error);
+fprintf('\nError de epoca de validacion: %f\n',epoch_validation_error);
+fprintf('\nError de epoca de prueba    : %f\n',epoch_error);
 
 historic_weight = importdata("historic_weight.txt");
 historic_bias = importdata("historic_bias.txt");

@@ -27,7 +27,7 @@ for data = 1:length(dataset.p)
         end
     end
     e = t - a{length(parameter)};
-    valdation_epoch_error = valdation_epoch_error + e;
+    valdation_epoch_error = valdation_epoch_error + abs(e);
 end
 
 %% Calculating epoch error
