@@ -11,8 +11,10 @@ configuration.arch1 = str2num(arch1);
 configuration.arch2 = str2num(arch2);
 configuration.alpha = str2double(alpha);
 configuration.range = str2num(range);
-configuration.input_file = uigetfile('*.txt','Seleccione el archivo de entradas del dataset');
-configuration.output_file = uigetfile('*.txt','Seleccione el archivo de salidas del dataset');
+[file, path] = uigetfile('*.txt','Seleccione el archivo de entradas del dataset');
+configuration.input_file = fullfile(path, file);
+[file, path] = uigetfile('*.txt','Seleccione el archivo de salidas del dataset');
+configuration.output_file = fullfile(path, file);
 
 %% Condiciones de finalizacion
 prompt = {'Número máximo de épocas','Múltiplo de épocas de validación','Valor máximo de error de época de entrenamiento','Número máximo de incrementos consecutivos de error de valicación'};
@@ -43,14 +45,14 @@ save('configuration.mat','configuration');
 clearvars -except configuration dataset
 
 %% Inicializacion de la arquitectura
-parameters = mlp_init(configuration.arch1);
+parameter = mlp_init(configuration.arch1);
 
 %% Entrenamiento
 for epoch = 1:configuration.epochmax
     if mod(epoch,configuration.epochval) == 0
-        epoch_validation_error = epoch_validation( configuration.arch2, dataset.valid, parameters );
+        epoch_validation_error = epoch_validation( configuration.arch2, dataset.valid, parameter );
     else 
-        epoch_error = epoch_training( configuration, dataset.train, parameters );
+        [epoch_error, parameter] = epoch_training( configuration, dataset.train, parameter );
     end
 end
 
