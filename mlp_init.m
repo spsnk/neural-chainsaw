@@ -17,4 +17,4 @@ for i=2:length(arquitecture)
    parameter(i-1).b = -1 + 2.*rand(dimsb);
 end
 
-save('parameters.mat','parameter');
+save('parameter.mat','parameter');

@@ -68,8 +68,8 @@ for data = 1:length(dataset.p)
     end
 end
 
-%% Saving results to mat file for this epoch
-save('parameters.mat','parameter');
+%% Saving backpropagation calculations for this epoch
+save('parameter.mat','parameter');
 
 %% Calculating epoch error
 epoch_error = epoch_error / length(dataset.p);

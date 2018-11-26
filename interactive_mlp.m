@@ -1,4 +1,4 @@
-%Perceptron multicapa
+%Perceptrón multicapa
 
 %% Configuración de perceptrón
 prompt = {'Vector 1 de la arquitectura (capas)','Vector 2 de la arquitectura (funciones de activación)','Factor de aprendizaje (alpha)','Rango de la señal'};
@@ -16,7 +16,7 @@ configuration.input_file = fullfile(path, file);
 [file, path] = uigetfile('*.txt','Seleccione el archivo de salidas del dataset');
 configuration.output_file = fullfile(path, file);
 
-%% Condiciones de finalizacion
+%% Condiciones de finalización
 prompt = {'Número máximo de épocas','Múltiplo de épocas de validación','Valor máximo de error de época de entrenamiento','Número máximo de incrementos consecutivos de error de valicación'};
 title = 'Condiciones de finalización';
 dims = [1 1 1 1];
@@ -28,7 +28,7 @@ configuration.epochval = str2double(epochval);
 configuration.numval = str2double(numval);
 configuration.max_epoch_error_train = str2double(max_epoch_error_train);
 
-%% Distribucion del dataset
+%% Distribución del dataset
 prompt = {'Porcentaje de datos del conjunto de entrenamiento','Porcentaje de datos del conjunto de validación','Porcentaje de datos del conjunto de prueba'};
 title = 'División del conjunto de datos';
 dims = [1 1 1];
@@ -44,7 +44,7 @@ dataset = dataset_divide(configuration.train_percent, configuration.valid_percen
 save('configuration.mat','configuration');
 clearvars -except configuration dataset
 
-%% Inicializacion de la arquitectura
+%% Inicialización de la arquitectura
 parameter = mlp_init(configuration.arch1);
 
 %% Entrenamiento
@@ -56,6 +56,7 @@ for epoch = 1:configuration.epochmax
     end
 end
 
+%% Presentación de resultados
 
 
 
