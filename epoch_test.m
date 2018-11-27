@@ -1,6 +1,6 @@
 function [error] = epoch_test(configuration, dataset, parameter)
 %Esta funcion ejecuta la validacion propagando los valores hacia adelante y
-%regresando el error de validación.
+%regresando el error.
 
 %% Inicializando
 error = 0;
@@ -30,8 +30,7 @@ for data = 1:length(dataset.p)
     end
     e = t - a{length(parameter)};
     error = error + abs(e);
-    fprintf(historic_test, '%f ', a{length(parameter)});
-    fprintf(historic_test, '\n');
+    fprintf(historic_test, '%f \n', a{length(parameter)});
 end
 fclose(historic_test);
 

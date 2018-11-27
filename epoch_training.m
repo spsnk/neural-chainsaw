@@ -5,14 +5,11 @@ function [epoch_error, parameter] = epoch_training(configuration, dataset, param
 %% Inicializando
 epoch_error = 0;
 
-historic_weight = fopen('historic_weight.txt', 'a+');
-historic_bias   = fopen('historic_bias.txt', 'a+');
-
 for data = 1:length(dataset.p)
-   p = dataset.p(data);
-   t = dataset.t(data);
+    p = dataset.p(data);
+    t = dataset.t(data);
 %Pre-alocando a
-   a = cell(1,length(parameter));
+    a = cell(1,length(parameter));
 
 %% Feed Fordward
     for layer = 1:length(parameter)
@@ -72,14 +69,12 @@ for data = 1:length(dataset.p)
         parameter(layer).w = weight_adjust;
         parameter(layer).b = bias_adjust;
 %Saving historical data
-        fprintf(historic_weight, '%f ', weight_adjust);
-        fprintf(historic_bias, '%f ', bias_adjust);
+        fprintf(configuration.historic_weight, '%f ', weight_adjust);
+        fprintf(configuration.historic_bias, '%f ', bias_adjust);
     end
-    fprintf(historic_weight, '\n');
-    fprintf(historic_bias, '\n');
+    fprintf(configuration.historic_weight, '\n');
+    fprintf(configuration.historic_bias, '\n');
 end
-fclose(historic_weight);
-fclose(historic_bias);
 
 %% Calculating epoch error
 epoch_error = epoch_error / length(dataset.p);
