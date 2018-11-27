@@ -11,6 +11,9 @@ t = load(dataset_output);
 
 dataset_size = length(p);
 
+dataset.full.p = p;
+dataset.full.t = t;
+
 valid_size = floor ( dataset_size * valid_percent/100 );
 test_size = floor ( dataset_size * test_percent/100 );
 
