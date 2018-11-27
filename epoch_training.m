@@ -35,30 +35,32 @@ for data = 1:length(dataset.p)
 
 %% Backpropagation
     s = cell(1,length(parameter));
+    f = cell(1,length(parameter));
     for layer = length(parameter):-1:1
 %Calculo de sensitividades
+        a_vect = [];
         switch configuration.arch2(layer)
             case 1
-                f = 1;
+                f{layer} = 1;
             case 2
-                dim = length(a{layer+1});
-                f = zeros(dim);
+                dim = length(a{layer});
+                f{layer} = zeros(dim);
                 for a_fill = 1:dim
                     a_vect(a_fill) = ( 1 - a{layer}(a_fill) ) * a{layer}(a_fill);
                 end
-                f(1:dim+1:dim^2) = a_vect;
+                f{layer}(1:dim+1:dim^2) = a_vect;
             case 3
-                dim = length(a{layer+1});
-                f = zeros(dim);
+                dim = length(a{layer});
+                f{layer} = zeros(dim);
                 for a_fill = 1:dim
                     a_vect(a_fill) = 1 - (a{layer}(a_fill))^2;
                 end
-                f(1:dim+1:dim^2) = a_vect;
+                f{layer}(1:dim+1:dim^2) = a_vect;
         end
         if layer == length(parameter)
-            s{layer} = -2*f*e;
+            s{layer} = -2*f{layer}*e;
         else 
-            s{layer} = f * parameter(layer+1).w' * s{layer+1};
+            s{layer} = f{layer} * parameter(layer+1).w' * s{layer+1};
         end
 %Aplicación de reglas de aprendizaje
         if layer == 1
