@@ -1,4 +1,6 @@
 %Perceptrón multicapa
+%% Workspace preparation
+delete historic_*.txt
 
 %% Configuración de perceptrón
 prompt = {'Vector 1 de la arquitectura (capas)','Vector 2 de la arquitectura (funciones de activación)','Factor de aprendizaje (alpha)','Rango de la señal'};
@@ -43,11 +45,10 @@ dataset = dataset_divide(configuration.train_percent, configuration.valid_percen
 %% Workspace cleanup & save configuration
 save('configuration.mat','configuration');
 clearvars -except configuration dataset
-delete historic_*.txt
 
 %% Inicialización de la arquitectura
 parameter = mlp_init(configuration.arch1);
-
+tic
 %% Entrenamiento
 incremento=0;
 epoch_validation_error=0;
@@ -72,7 +73,7 @@ for epoch = 1:configuration.epochmax
 %Saving backpropagation calculations for this epoch
     save('parameter.mat','parameter');
 end
-
+toc
 %% Realizando la etapa de prueba
 epoch_test_error = epoch_test( configuration, dataset.test,parameter);
 
@@ -107,7 +108,7 @@ title('Bias learning');
 figure;
 hold on;
 test_data = importdata("historic_test.txt");
-plot(dataset.test.p,test_data,' x');
+plot(dataset.test.p,test_data,'-x');
 plot(dataset.test.p,dataset.test.t,' o');
 plot(dataset.train.p,dataset.train.t,'-');
 xlabel('Input');
