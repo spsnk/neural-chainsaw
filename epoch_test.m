@@ -4,7 +4,7 @@ function [error] = epoch_test(configuration, dataset, parameter)
 
 %% Inicializando
 error = 0;
-historic_test = fopen('historic_test.txt', 'a+');
+historic_test = fopen('historic_test.txt', 'w+');
 
 for data = 1:length(dataset.p)
    p = dataset.p(data);
@@ -29,7 +29,7 @@ for data = 1:length(dataset.p)
         end
     end
     e = t - a{length(parameter)};
-    error = error + e;
+    error = error + abs(e);
     fprintf(historic_test, '%f ', a{length(parameter)});
     fprintf(historic_test, '\n');
 end
