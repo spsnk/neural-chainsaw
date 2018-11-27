@@ -17,9 +17,9 @@ for data = 1:length(dataset.p)
 %% Feed Fordward
     for layer = 1:length(parameter)
         if layer == 1
-            n = parameter(layer).w * p;
+            n = parameter(layer).w * p + parameter(layer).b;
         else
-            n = parameter(layer).w * a{layer-1};
+            n = parameter(layer).w * a{layer-1} + parameter(layer).b;
         end
         switch configuration.arch2(layer)
             case 1
@@ -41,14 +41,14 @@ for data = 1:length(dataset.p)
             case 1
                 f = 1;
             case 2
-                dim = length(a{layer});
+                dim = length(a{layer+1});
                 f = zeros(dim);
                 for a_fill = 1:dim
                     a_vect(a_fill) = ( 1 - a{layer}(a_fill) ) * a{layer}(a_fill);
                 end
                 f(1:dim+1:dim^2) = a_vect;
             case 3
-                dim = length(a{layer});
+                dim = length(a{layer+1});
                 f = zeros(dim);
                 for a_fill = 1:dim
                     a_vect(a_fill) = 1 - (a{layer}(a_fill))^2;
@@ -58,7 +58,7 @@ for data = 1:length(dataset.p)
         if layer == length(parameter)
             s{layer} = -2*f*e;
         else 
-            s{layer} = f * parameter(layer).w * s{layer+1};
+            s{layer} = f * parameter(layer+1).w' * s{layer+1};
         end
 %Aplicación de reglas de aprendizaje
         if layer == 1

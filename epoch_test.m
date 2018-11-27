@@ -15,9 +15,9 @@ for data = 1:length(dataset.p)
 %% Feed Fordward
     for layer = 1:length(parameter)
         if layer == 1
-            n = parameter(layer).w * p;
+            n = parameter(layer).w * p + parameter(layer).b;
         else
-            n = parameter(layer).w * a{layer-1};
+            n = parameter(layer).w * a{layer-1} + parameter(layer).b;
         end
         switch configuration.arch2(layer)
             case 1
