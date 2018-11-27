@@ -90,16 +90,15 @@ fprintf('\nError de epoca:               %f\n',epoch_error);
 fprintf('\nError de epoca de validacion: %f\n',epoch_validation_error);
 fprintf('\nError de epoca de prueba    : %f\n',epoch_test_error);
 
-historic_weight = importdata("historic_weight.txt");
-historic_bias = importdata("historic_bias.txt");
-
 figure;
+historic_weight = importdata("historic_weight.txt");
 plot(1:size(historic_weight,1),historic_weight);
 xlabel('Weight adjustment');
 ylabel('Value');
 title('Weight learning');
 
 figure;
+historic_bias = importdata("historic_bias.txt");
 plot(1:size(historic_bias,1),historic_bias);
 xlabel('Bias adjustment');
 ylabel('Value');
