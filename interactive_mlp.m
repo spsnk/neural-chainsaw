@@ -25,7 +25,7 @@ answer = inputdlg(prompt,title,dims,definput);
 [epochmax, epochval, max_epoch_error_train, numval] = answer{:};
 configuration.epochmax = str2double(epochmax);
 configuration.epochval = str2double(epochval);
-configuration.numval = str2double(numval);
+configuration.numval   = str2double(numval);
 configuration.max_epoch_error_train = str2double(max_epoch_error_train);
 
 %% Distribución del dataset
@@ -73,6 +73,9 @@ for epoch = 1:configuration.epochmax
     save('parameter.mat','parameter');
 end
 
+%% Realizando época de prueba
+epoch_test_error = epoch_training( configuration, dataset.test, parameter );
+
 %% Presentación de resultados
 
 disp('Valores finales');
@@ -85,7 +88,7 @@ for i = 1:length(parameter)
 end
 fprintf('\nError de epoca:               %f\n',epoch_error);
 fprintf('\nError de epoca de validacion: %f\n',epoch_validation_error);
-fprintf('\nError de epoca de prueba    : %f\n',epoch_error);
+fprintf('\nError de epoca de prueba    : %f\n',epoch_test_error);
 
 historic_weight = importdata("historic_weight.txt");
 historic_bias = importdata("historic_bias.txt");
