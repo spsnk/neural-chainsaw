@@ -50,9 +50,9 @@ parameter = mlp_init(configuration.arch1);
 
 %% Entrenamiento
 incremento=0;
+epoch_validation_error=0;
 for epoch = 1:configuration.epochmax
     if mod(epoch,configuration.epochval) == 0
-        epoch_validation_error=0;
         last_epoch_validation_error = epoch_validation_error;
         epoch_validation_error = epoch_validation( configuration, dataset.valid, parameter );
         if last_epoch_validation_error < epoch_validation_error
@@ -62,9 +62,9 @@ for epoch = 1:configuration.epochmax
         end
         last_epoch_validation_error = epoch_validation_error;
         %Se verifica que no exista sobre entrenamiento y de ser asi el entrenamiento termina.
-        if incremento == numval
+        if incremento == configuration.numval
             epocas = configuration.epochmax + 1;
-            fprintf('\nTermina por early stopping\n');
+            fprintf('\nTermina por early stopping en epoca: %d\n',epoch);
         end
     else 
         [epoch_error, parameter] = epoch_training( configuration, dataset.train, parameter );
@@ -73,8 +73,8 @@ for epoch = 1:configuration.epochmax
     save('parameter.mat','parameter');
 end
 
-%% Realizando época de prueba
-epoch_test_error = epoch_training( configuration, dataset.test, parameter );
+%% Realizando la etapa de prueba
+epoch_test_error = epoch_test( configuration, dataset.test,parameter);
 
 %% Presentación de resultados
 
@@ -105,3 +105,14 @@ xlabel('Bias adjustment');
 ylabel('Value');
 title('Bias learning');
 
+figure;
+hold on;
+test_data = importdata("historic_test.txt");
+plot(dataset.test.p,test_data,' x');
+plot(dataset.test.p,dataset.test.t,' o');
+plot(dataset.train.p,dataset.train.t,'-');
+xlabel('Input');
+ylabel('Output');
+title('MLP');   
+legend({'MLP','Test Data'});
+hold off;
