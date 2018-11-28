@@ -142,25 +142,9 @@ if ~test
     fprintf('\nError de epoca:               %f\n',epoch_error);
     fprintf('Error de epoca de validacion: %f\n',epoch_validation_error);
     fprintf('Error de epoca de prueba    : %f\n',epoch_test_error);
-
-    figure('Name','Weight evolution');
-    historic_weight = importdata("historic_weight.txt");
-    plot(1:size(historic_weight,1),historic_weight);
-    xlabel('Weight adjustment');
-    ylabel('Value');
-    title('Weight learning');
-    saveas(gcf,'fig_weight_learning','png');
-
-    figure('Name','Bias evolution');
-    historic_bias = importdata("historic_bias.txt");
-    plot(1:size(historic_bias,1),historic_bias);
-    xlabel('Bias adjustment');
-    ylabel('Value');
-    title('Bias learning');
-    saveas(gcf,'fig_bias_learning','png');
+    
     figure('Name','Multi Layer Perceptron Output');
     hold on;
-    
     test_data = importdata("historic_test.txt");
     plot(dataset.test.p,test_data,'b:x');
     plot(dataset.test.p,dataset.test.t,'r o');
@@ -171,13 +155,29 @@ if ~test
     legend({'MLP','Test Data'});
     saveas(gcf,'fig_mlp_test','png');
     hold off;
+    
 %Saving human readable configuration    
     writetable(struct2table(configuration),'result_configuration.txt');
     writetable(struct2table(parameter),'result_parameters.txt');
-    
+
+    figure('Name','Weight evolution');
+    historic_weight = importdata("historic_weight.txt");
+    plot(1:size(historic_weight,1),historic_weight);
+    xlabel('Weight adjustment');
+    ylabel('Value');
+    title('Weight learning');
+    saveas(gcf,'fig_weight_learning','png');
     clearvars historic*
-end
-if test
+
+    figure('Name','Bias evolution');
+    historic_bias = importdata("historic_bias.txt");
+    plot(1:size(historic_bias,1),historic_bias);
+    xlabel('Bias adjustment');
+    ylabel('Value');
+    title('Bias learning');
+    saveas(gcf,'fig_bias_learning','png');
+    clearvars historic*
+else
     figure('Name','Multi Layer Perceptron Output');
     hold on;
     test_data = importdata("historic_test.txt");
