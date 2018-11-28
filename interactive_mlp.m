@@ -23,7 +23,7 @@ if ~reload && ~test
     prompt = {'Vector 1 de la arquitectura (capas)','Vector 2 de la arquitectura (funciones de activación)','Factor de aprendizaje (alpha)','Rango de la señal'};
     title = 'Parámetros de la red';
     dims = [1 1 1 1];
-    definput = {'[1 2 1]','[2 1]','0.0003','[-2 2]'}; 
+    definput = {'[1 2 1]','[2 1]','0.03','[-2 2]'}; 
     answer = inputdlg(prompt,title,dims,definput);
     [arch1, arch2, alpha, range] = answer{:};
     configuration.arch1 = str2num(arch1);
@@ -143,19 +143,6 @@ if ~test
     fprintf('Error de epoca de validacion: %f\n',epoch_validation_error);
     fprintf('Error de epoca de prueba    : %f\n',epoch_test_error);
 
-    figure('Name','Multi Layer Perceptron Output');
-    hold on;
-    test_data = importdata("historic_test.txt");
-    plot(dataset.test.p,test_data,'b:x');
-    plot(dataset.test.p,dataset.test.t,'r o');
-    plot(dataset.train.p,dataset.train.t,'r-');
-    xlabel('Input');
-    ylabel('Output');
-    title('MLP');
-    legend({'MLP','Test Data'});
-    saveas(gcf,'fig_mlp_test','png');
-    hold off;
-
     figure('Name','Weight evolution');
     historic_weight = importdata("historic_weight.txt");
     plot(1:size(historic_weight,1),historic_weight);
@@ -171,6 +158,23 @@ if ~test
     ylabel('Value');
     title('Bias learning');
     saveas(gcf,'fig_bias_learning','png');
+    figure('Name','Multi Layer Perceptron Output');
+    hold on;
+    
+    test_data = importdata("historic_test.txt");
+    plot(dataset.test.p,test_data,'b:x');
+    plot(dataset.test.p,dataset.test.t,'r o');
+    plot(dataset.train.p,dataset.train.t,'r-');
+    xlabel('Input');
+    ylabel('Output');
+    title('MLP');
+    legend({'MLP','Test Data'});
+    saveas(gcf,'fig_mlp_test','png');
+    hold off;
+%Saving human readable configuration    
+    writetable(struct2table(configuration),'result_configuration.txt');
+    writetable(struct2table(parameter),'result_parameters.txt');
+    
     clearvars historic*
 end
 if test
