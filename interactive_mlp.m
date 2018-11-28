@@ -104,6 +104,7 @@ if ~test
             end
         else 
             [epoch_error, parameter] = epoch_training( configuration, dataset.train, parameter );
+            fprintf('Error de época de validación: %f\n',epoch_error);
             if epoch_error < configuration.max_epoch_error_train
                 fprintf('\nTermina por early stopping (error de entrenamiento) en epoca: %d\n',epoch);
                 epoch = configuration.epochmax + 1;
