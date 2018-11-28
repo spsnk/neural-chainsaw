@@ -86,12 +86,13 @@ clearvars -except configuration dataset parameter test
 if ~test
     tic
     incremento=0;
+    stop = false;
     epoch_validation_error=0;
     for epoch = 1:configuration.epochmax
         if mod(epoch,configuration.epochval) == 0
             last_epoch_validation_error = epoch_validation_error;
             epoch_validation_error = epoch_validation( configuration, dataset.valid, parameter );
-            if last_epoch_validation_error < epoch_validation_error
+            if last_epoch_validation_error <= epoch_validation_error
                 incremento = incremento+1;
             else
                 incremento = 0;
@@ -100,18 +101,21 @@ if ~test
             %Se verifica que no exista sobre entrenamiento y de ser asi el entrenamiento termina.
             if incremento == configuration.numval
                 fprintf('\nTermina por early stopping (incremento) en epoca: %d\n',epoch);
-                epoch = configuration.epochmax + 1;
+                stop = true;
             end
         else 
             [epoch_error, parameter] = epoch_training( configuration, dataset.train, parameter );
             fprintf('Error de época de validación: %f\n',epoch_error);
             if epoch_error < configuration.max_epoch_error_train
                 fprintf('\nTermina por early stopping (error de entrenamiento) en epoca: %d\n',epoch);
-                epoch = configuration.epochmax + 1;
+                stop = true;
             end
         end
     %Saving backpropagation calculations for this epoch
         save('parameter.mat','parameter');
+        if stop
+            break
+        end
     end
     fclose(configuration.historic_weight);
     fclose(configuration.historic_bias);
