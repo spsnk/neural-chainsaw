@@ -97,7 +97,7 @@ if ~test
             else
                 incremento = 0;
             end
-            last_epoch_validation_error = epoch_validation_error;
+            fprintf('Error de época de validación: %f\n',epoch_validation_error);
             %Se verifica que no exista sobre entrenamiento y de ser asi el entrenamiento termina.
             if incremento == configuration.numval
                 fprintf('\nTermina por early stopping (incremento) en epoca: %d\n',epoch);
@@ -105,7 +105,6 @@ if ~test
             end
         else 
             [epoch_error, parameter] = epoch_training( configuration, dataset.train, parameter );
-            fprintf('Error de época de validación: %f\n',epoch_error);
             if epoch_error < configuration.max_epoch_error_train
                 fprintf('\nTermina por early stopping (error de entrenamiento) en epoca: %d\n',epoch);
                 stop = true;
