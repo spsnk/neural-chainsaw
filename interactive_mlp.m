@@ -152,7 +152,7 @@ if ~test
     test_data = importdata("historic_test.txt");
     plot(dataset.test.p,test_data,'b:x');
     plot(dataset.test.p,dataset.test.t,'r o');
-    plot(dataset.train.p,dataset.train.t,'r-');
+    plot(dataset.full.p,dataset.full.t,'r-');
     xlabel('Input');
     ylabel('Output');
     title('MLP');
