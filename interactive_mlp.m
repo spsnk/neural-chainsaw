@@ -77,8 +77,10 @@ if ~reload
     delete historic_*.txt
 end
 if ~test
-    configuration.historic_weight = fopen('historic_weight.txt', 'a+');
-    configuration.historic_bias   = fopen('historic_bias.txt', 'a+');
+    for i = 1:length(parameter)
+        configuration.historic_weight(i) = fopen(sprintf('historic_weight_%d.txt', i), 'a+');
+        configuration.historic_bias(i)   = fopen(sprintf('historic_bias_%d.txt', i), 'a+');
+    end
 end
 clearvars -except configuration dataset parameter test
 
@@ -118,8 +120,10 @@ if ~test
             break
         end
     end
-    fclose(configuration.historic_weight);
-    fclose(configuration.historic_bias);
+    for i = 1:length(parameter)
+        fclose(configuration.historic_weight(i));
+        fclose(configuration.historic_bias(i));
+    end
     toc
 end
 %% Realizando la etapa de prueba
@@ -165,24 +169,25 @@ if ~test
 %Saving human readable configuration    
     writetable(struct2table(configuration),'result_configuration.txt');
     writetable(struct2table(parameter),'result_parameters.txt');
+    for i = 1:length(parameter)
+        figure('Name',sprintf('Weight evolution layer %d',i));
+        historic_weight = importdata(sprintf('historic_weight_%d.txt', i));
+        plot(1:size(historic_weight,1),historic_weight);
+        xlabel('Weight adjustment');
+        ylabel('Value');
+        title('Weight learning');
+        saveas(gcf,sprintf('fig_weight_learning_%d',i),'png');
+        %clearvars historic_weight
 
-    figure('Name','Weight evolution');
-    historic_weight = importdata("historic_weight.txt");
-    plot(1:size(historic_weight,1),historic_weight);
-    xlabel('Weight adjustment');
-    ylabel('Value');
-    title('Weight learning');
-    saveas(gcf,'fig_weight_learning','png');
-    clearvars historic*
-
-    figure('Name','Bias evolution');
-    historic_bias = importdata("historic_bias.txt");
-    plot(1:size(historic_bias,1),historic_bias);
-    xlabel('Bias adjustment');
-    ylabel('Value');
-    title('Bias learning');
-    saveas(gcf,'fig_bias_learning','png');
-    clearvars historic*
+        figure('Name',sprintf('Bias evolution layer %d',i));
+        historic_bias = importdata(sprintf('historic_bias_%d.txt', i));
+        plot(1:size(historic_bias,1),historic_bias);
+        xlabel('Bias adjustment');
+        ylabel('Value');
+        title('Bias learning');
+        saveas(gcf,sprintf('fig_bias_learning_%d',i),'png');
+        %clearvars historic_bias
+    end
 else
     figure('Name','Multi Layer Perceptron Output');
     hold on;
