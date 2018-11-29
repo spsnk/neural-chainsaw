@@ -100,7 +100,7 @@ if ~test
             else
                 incremento = 0;
             end
-            fprintf('Error de época de validación: %f\n',epoch_validation_error);
+            %fprintf('Error de época de validación: %f\n',epoch_validation_error);
             %Se verifica que no exista sobre entrenamiento y de ser asi el entrenamiento termina.
             if incremento == configuration.numval
                 fprintf('\nTermina por early stopping (incremento) en epoca: %d\n',epoch);
@@ -175,19 +175,18 @@ if ~test
         plot(1:size(historic_weight,1),historic_weight);
         xlabel('Weight adjustment');
         ylabel('Value');
-        title('Weight learning');
+        title(sprintf('Weight learning for layer %d',1));
         saveas(gcf,sprintf('fig_weight_learning_%d',i),'png');
-        %clearvars historic_weight
 
         figure('Name',sprintf('Bias evolution layer %d',i));
         historic_bias = importdata(sprintf('historic_bias_%d.txt', i));
         plot(1:size(historic_bias,1),historic_bias);
         xlabel('Bias adjustment');
         ylabel('Value');
-        title('Bias learning');
+        title(sprintf('Bias learning for layer %d',i));
         saveas(gcf,sprintf('fig_bias_learning_%d',i),'png');
-        %clearvars historic_bias
     end
+    clearvars historic_*
 else
     figure('Name','Multi Layer Perceptron Output');
     hold on;
