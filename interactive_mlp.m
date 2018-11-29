@@ -81,6 +81,8 @@ if ~test
         configuration.historic_weight(i) = fopen(sprintf('historic_weight_%d.txt', i), 'a+');
         configuration.historic_bias(i)   = fopen(sprintf('historic_bias_%d.txt', i), 'a+');
     end
+    configuration.historic_training_error = fopen('historic_training_error.txt', 'a+');
+    configuration.historic_validation_error = fopen('historic_validation_error.txt', 'a+');
 end
 clearvars -except configuration dataset parameter test
 
@@ -100,6 +102,7 @@ if ~test
             else
                 incremento = 0;
             end
+            fprintf(configuration.historic_validation_error, '%f \n', epoch_validation_error);
             %fprintf('Error de época de validación: %f\n',epoch_validation_error);
             %Se verifica que no exista sobre entrenamiento y de ser asi el entrenamiento termina.
             if incremento == configuration.numval
@@ -109,6 +112,13 @@ if ~test
             end
         else 
             [epoch_error, parameter] = epoch_training( configuration, dataset.train, parameter );
+            for i = 1 :length(parameter)
+                fprintf(configuration.historic_weight(i), '%f ', parameter(i).w);
+                fprintf(configuration.historic_bias(i), '%f ', parameter(i).b);
+                fprintf(configuration.historic_weight(i), '\n');
+                fprintf(configuration.historic_bias(i), '\n');
+            end
+            fprintf(configuration.historic_training_error, '%f \n', epoch_error);
             if epoch_error < configuration.max_epoch_error_train
                 fprintf('\nTermina por early stopping (error de entrenamiento) en epoca: %d\n',epoch);
                 stop = true;
@@ -124,6 +134,8 @@ if ~test
         fclose(configuration.historic_weight(i));
         fclose(configuration.historic_bias(i));
     end
+    fclose(configuration.historic_training_error);
+    fclose(configuration.historic_validation_error);
     toc
 end
 %% Realizando la etapa de prueba
@@ -169,19 +181,36 @@ if ~test
 %Saving human readable configuration    
     writetable(struct2table(configuration),'result_configuration.txt');
     writetable(struct2table(parameter),'result_parameters.txt');
+    
+    figure('Name','Training error evolution');
+    historic_error = importdata('historic_training_error.txt');
+    plot(1:length(historic_error),historic_error);
+    xlabel('Epoch');
+    ylabel('Value');
+    title('Training error evolution');
+    saveas(gcf,'fig_training_error','png');
+    
+    figure('Name','Validation error evolution');
+    historic_error = importdata('historic_validation_error.txt');
+    plot(1:length(historic_error),historic_error);
+    xlabel('Epoch');
+    ylabel('Value');
+    title('Validation error evolution');
+    saveas(gcf,'fig_validation_error','png');
+        
     for i = 1:length(parameter)
         figure('Name',sprintf('Weight evolution layer %d',i));
         historic_weight = importdata(sprintf('historic_weight_%d.txt', i));
         plot(1:size(historic_weight,1),historic_weight);
-        xlabel('Weight adjustment');
+        xlabel('Epoch');
         ylabel('Value');
-        title(sprintf('Weight learning for layer %d',1));
+        title(sprintf('Weight learning for layer %d',i));
         saveas(gcf,sprintf('fig_weight_learning_%d',i),'png');
 
         figure('Name',sprintf('Bias evolution layer %d',i));
         historic_bias = importdata(sprintf('historic_bias_%d.txt', i));
         plot(1:size(historic_bias,1),historic_bias);
-        xlabel('Bias adjustment');
+        xlabel('Epoch');
         ylabel('Value');
         title(sprintf('Bias learning for layer %d',i));
         saveas(gcf,sprintf('fig_bias_learning_%d',i),'png');

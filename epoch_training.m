@@ -69,10 +69,6 @@ for data = 1:length(dataset.p)
         parameter(layer).w = weight_adjust;
         parameter(layer).b = bias_adjust;
 %Saving historical data
-        fprintf(configuration.historic_weight(layer), '%f ', weight_adjust);
-        fprintf(configuration.historic_bias(layer), '%f ', bias_adjust);
-        fprintf(configuration.historic_weight(layer), '\n');
-        fprintf(configuration.historic_bias(layer), '\n');
     end
 end
 
