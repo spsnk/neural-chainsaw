@@ -92,8 +92,9 @@ if ~test
         if mod(epoch,configuration.epochval) == 0
             last_epoch_validation_error = epoch_validation_error;
             epoch_validation_error = epoch_validation( configuration, dataset.valid, parameter );
-            if last_epoch_validation_error <= epoch_validation_error
+            if last_epoch_validation_error < epoch_validation_error
                 incremento = incremento+1;
+                save('parameter-early.mat','parameter');
             else
                 incremento = 0;
             end
@@ -101,6 +102,7 @@ if ~test
             %Se verifica que no exista sobre entrenamiento y de ser asi el entrenamiento termina.
             if incremento == configuration.numval
                 fprintf('\nTermina por early stopping (incremento) en epoca: %d\n',epoch);
+                load('parameter-early.mat');
                 stop = true;
             end
         else 
