@@ -79,7 +79,7 @@ end
 if ~test
     for i = 1:length(parameter)
         configuration.historic_weight(i) = fopen(sprintf('historic_weight_%d.txt', i), 'a+');
-        configuration.historic_bias(i)   = fopen(s printf('historic_bias_%d.txt', i), 'a+');
+        configuration.historic_bias(i)   = fopen(sprintf('historic_bias_%d.txt', i), 'a+');
     end
     configuration.historic_training_error = fopen('historic_training_error.txt', 'a+');
     configuration.historic_validation_error = fopen('historic_validation_error.txt', 'a+');
